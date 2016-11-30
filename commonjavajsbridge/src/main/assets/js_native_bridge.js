@@ -130,6 +130,7 @@
 
 	//暴漏给native的唯一一个通信方法
 	function _handleMessageFromNative(messageJSON) {
+	     alert("+++++++++"+messageJSON);
 		_dispatchMessageFromNative(messageJSON);
 	}
 

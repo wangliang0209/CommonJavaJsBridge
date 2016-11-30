@@ -28,7 +28,7 @@ import com.msj.jsbridge.R;
  * @author Vincent.M
  * @date 16/11/30
  * @copyright ©2016 孟祥程 All Rights Reserved
- * @desc
+ * @desc 公共WebView
  */
 public class WebViewFragment extends Fragment {
 

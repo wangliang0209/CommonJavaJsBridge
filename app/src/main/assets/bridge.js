@@ -50,6 +50,7 @@
 				});
 			});
 
+
 			bridge.registerHandler("exam1",function(message, responseCallback){
 
 				var result=document.getElementById("result");

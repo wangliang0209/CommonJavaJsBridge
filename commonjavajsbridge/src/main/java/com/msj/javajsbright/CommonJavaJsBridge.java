@@ -464,31 +464,39 @@ public class CommonJavaJsBridge {
         return ++sUniqueCallbackId + "_" + System.currentTimeMillis();
     }
 
-    private void sendRequest2JS(RequestResponseBuilder requst) {
-        if (requst != null) {
+    /**
+     * 给js发送request
+     * @param request
+     */
+    private void sendRequest2JS(RequestResponseBuilder request) {
+        if (request != null) {
             String callbackId = generaUniqueCallbackId();
-            requst.setCallbackId(callbackId);
+            request.setCallbackId(callbackId);
 
         /*处理提供给js的回调方法*/
-            if (requst.getCallback() != null) {
-                Class bridgeClass = requst.getCallback().getClass();
+            if (request.getCallback() != null) {
+                Class bridgeClass = request.getCallback().getClass();
                 Method[] allMethod = bridgeClass.getDeclaredMethods();
                 JavaCallback4JS javaCallback4JS = null;
                 for (Method method : allMethod) {
                     javaCallback4JS = method.getAnnotation(JavaCallback4JS.class);
                     if (javaCallback4JS != null) {
-                        mJavaCallbackMethods4JSCache.put(callbackId, MethodHandler.createMethodHandler(requst.getCallback(), method));
+                        mJavaCallbackMethods4JSCache.put(callbackId, MethodHandler.createMethodHandler(request.getCallback(), method));
                         break;
                     }
 
                 }
             }
 
-            startSendData2JS(requst.toString());
+            startSendData2JS(request.toString());
 
         }
     }
 
+    /**
+     * 发送response给js
+     * @param response
+     */
     private void sendResponse2JS(RequestResponseBuilder response) {
         if (response != null) {
             startSendData2JS(response.toString());
