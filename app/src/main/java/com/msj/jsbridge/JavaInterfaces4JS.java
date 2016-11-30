@@ -70,13 +70,25 @@ public class JavaInterfaces4JS {
 
 
     @InvokeJavaInterface("test1")
-    public void test(@Param Person personInfo, @ParamCallback ITest1JSCallback jsCallback) {
+    public void test(@Param Person personInfo, @ParamCallback final ITest1JSCallback jsCallback) {
 
         if (personInfo != null) {
             mWebViewFragment.setResult("native的test1接口被调用，js传递数据: " + "name=" + personInfo.name + " age=" + personInfo.age);
 
         }
-        jsCallback.callback(ResponseStatus.OK, new Person("niuxiaowei", 30));
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(3000);
+                    jsCallback.callback(ResponseStatus.OK, new Person("niuxiaowei", 30));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }).start();
+
     }
 
 

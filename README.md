@@ -6,8 +6,10 @@
 ### request
 ```
 {      
-          //接口名称
+          //js调java接口名称
           "interfaceName":"test",
+          //java调js
+          “handlerName”:"test",
           //回调id值
           "callbackId":"c_111111",
           //传递的参数
