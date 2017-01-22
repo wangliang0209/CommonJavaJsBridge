@@ -531,7 +531,7 @@ public class CommonJavaJsBridge {
 
         data = String.format(mJSMethod4SendData2JS, data);
 
-        final String finalData = data;
+        final String finalData = data.replace("\"[","[").replace("]\"","]").replace("\"{","{").replace("}\"","}");
         if(mIsDebug){
 
             Log.i(TAG, "发送给js的数据:" + data );

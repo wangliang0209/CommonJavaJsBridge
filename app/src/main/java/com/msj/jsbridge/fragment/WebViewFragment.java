@@ -1,6 +1,8 @@
 package com.msj.jsbridge.fragment;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,6 +10,8 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.ValueCallback;
+import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
@@ -87,6 +91,43 @@ public class WebViewFragment extends Fragment {
         JavaInterfaces4JS javaInterfaces4JS = new JavaInterfaces4JS(this);
         mSimpleJavaJsBridge = new CommonJavaJsBridge.Builder().addJavaInterface4JS(javaInterfaces4JS)
                 .setWebView(mWebView)
+                .setWebChromeClient(new WebChromeClient(){
+                    public void openFileChooser(ValueCallback<Uri> uploadMsg) {
+                        mUploadMessage = uploadMsg;
+                        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+                        i.addCategory(Intent.CATEGORY_OPENABLE);
+                        i.setType("*/*");
+                        startActivityForResult(Intent.createChooser(i, "File Chooser"), FILECHOOSER_RESULTCODE);
+                    }
+                    // For Android 5.0+
+                    public boolean onShowFileChooser (WebView webView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
+                        uploadMessage = filePathCallback;
+                        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+                        i.addCategory(Intent.CATEGORY_OPENABLE);
+                        i.setType("*/*");
+                        startActivityForResult(
+                                Intent.createChooser(i, "File Browser"),
+                                FILECHOOSER_RESULTCODE);
+                        return true;
+                    }
+
+                    public void openFileChooser(ValueCallback uploadMsg, String acceptType ) {
+                        mUploadMessage = uploadMsg;
+                        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+                        i.addCategory(Intent.CATEGORY_OPENABLE);
+                        i.setType("*/*");
+                        startActivityForResult(
+                                Intent.createChooser(i, "File Browser"),
+                                FILECHOOSER_RESULTCODE);
+                    }
+                    public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture){
+                        mUploadMessage = uploadMsg;
+                        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+                        i.addCategory(Intent.CATEGORY_OPENABLE);
+                        i.setType("*/*");
+                        startActivityForResult( Intent.createChooser( i, "File Browser" ), FILECHOOSER_RESULTCODE );
+                    }
+                })
                 .setJSMethodName4Java("_JSNativeBridge._handleMessageFromNative")
                 .setProtocol("msj","receive_msg").create();
     }
@@ -255,5 +296,11 @@ public class WebViewFragment extends Fragment {
             mWebView.loadUrl(mUrl);
         }
     }
+
+    private ValueCallback<Uri> mUploadMessage;
+    public ValueCallback<Uri[]> uploadMessage;
+    public static final int REQUEST_SELECT_FILE = 100;
+    private final static int FILECHOOSER_RESULTCODE = 2;
+
 
 }

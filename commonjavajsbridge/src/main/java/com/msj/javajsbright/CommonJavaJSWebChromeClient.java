@@ -2,6 +2,7 @@ package com.msj.javajsbright;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.webkit.GeolocationPermissions;
 import android.webkit.JsPromptResult;
 import android.webkit.JsResult;
 import android.webkit.PermissionRequest;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebStorage;
 import android.webkit.WebView;
@@ -18,6 +20,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Method;
 
 /**
  * @author Vincent.M
@@ -288,5 +291,59 @@ public class CommonJavaJSWebChromeClient extends WebChromeClient {
             mWebChromeClient.onConsoleMessage(consoleMessage);
         }
         return super.onConsoleMessage(consoleMessage);
+    }
+
+    public void openFileChooser(ValueCallback<Uri> uploadMsg){
+        if (checkObjectNotNull(mWebChromeClient)) {
+            Class<?> clazz = mWebChromeClient.getClass();
+            try {
+                Method method = clazz.getMethod("openFileChooser",ValueCallback.class);
+                method.setAccessible(true);
+                method.invoke(mWebChromeClient,uploadMsg);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public boolean onShowFileChooser (WebView webView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
+        if (checkObjectNotNull(mWebChromeClient)) {
+            Class<?> clazz = mWebChromeClient.getClass();
+            try {
+                Method method = clazz.getMethod("onShowFileChooser",WebView.class,ValueCallback.class,WebChromeClient.FileChooserParams.class);
+                method.setAccessible(true);
+                Object result = method.invoke(mWebChromeClient,webView,filePathCallback,fileChooserParams);
+                return (boolean) result;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public void openFileChooser( ValueCallback uploadMsg, String acceptType ) {
+        if (checkObjectNotNull(mWebChromeClient)) {
+            Class<?> clazz = mWebChromeClient.getClass();
+            try {
+                Method method = clazz.getMethod("openFileChooser",ValueCallback.class,String.class);
+                method.setAccessible(true);
+                method.invoke(mWebChromeClient,uploadMsg,acceptType);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture){
+        if (checkObjectNotNull(mWebChromeClient)) {
+            Class<?> clazz = mWebChromeClient.getClass();
+            try {
+                Method method = clazz.getMethod("openFileChooser",ValueCallback.class,String.class,String.class);
+                method.setAccessible(true);
+                method.invoke(mWebChromeClient,uploadMsg,acceptType,capture);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

@@ -276,7 +276,6 @@ public class RequestResponseBuilder {
             }
             values = mResponse.responseValues;
         }
-
         try {
             values.put(key, value);
         } catch (JSONException e) {
@@ -357,7 +356,6 @@ public class RequestResponseBuilder {
         } else {
             requestResponseBuilder = new RequestResponseBuilder(true, json);
         }
-
         return requestResponseBuilder;
     }
 
