@@ -38,7 +38,7 @@ publish {
     userOrg = 'dreamteam'//bintray.com用户名
     groupId = 'com.msj.javajsbridge'//jcenter上的路径
     artifactId = 'javajsbridge'//项目名称
-    publishVersion = '1.0.3'//版本号
+    publishVersion = '1.0.4'//版本号
     desc = 'native与js交互'//描述，不重要
     website = 'https://github.com/CentMeng/CommonJavaJsBridge'//网站，不重要；尽量模拟github上的地址，例如我这样的；当然你有地址最好了
 }
